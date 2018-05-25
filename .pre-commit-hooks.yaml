@@ -1,0 +1,227 @@
+---
+- id: fetch-notes
+  name: Fetch Git notes
+  description: Fetch the Git notes from the repo
+  entry: pre_commit_hooks/fetch-notes.sh
+  pass_filenames: false
+  language: script
+
+- id: commit-message-line-length
+  name: Commit message line length
+  description: Check that message lines do not exceed max allowed line length
+  entry: pre_commit_hooks/commit-message-line-length.sh
+  language: script
+
+- id: num-files-in-commit
+  name: Number of files in commit
+  description: Check that number of files in commit is less than limit
+  entry: pre_commit_hooks/num-files-in-commit.sh
+  language: script
+
+- id: gitlint
+  name: gitlint
+  entry: gitlint --msg-filename
+  language: python
+
+- id: send-telemetry
+  name: Send telemetry
+  description: Send usage telemetry to Google Analytics
+  entry: pre_commit_hooks/send-telemetry.sh
+  pass_filenames: false
+  language: script
+
+- id: shellcheck
+  name: Test shell scripts with shellcheck
+  description: Shell scripts conform to shellcheck
+  entry: pre_commit_hooks/shellcheck.sh
+  language: script
+  types: [shell]
+  args: [-e, SC1091]
+
+- id: shfmt
+  name: Check shell style with shfmt
+  language: script
+  entry: pre_commit_hooks/shfmt.sh
+  types: [shell]
+  args: ['-l', '-w', '-i', '4', '-ci']
+
+- id: checkstyle
+  name: Checkstyle
+  description: Lint Java files with Checkstyle
+  entry: pre_commit_hooks/generic-hook.sh checkstyle
+  language: script
+  types: [file, java]
+
+- id: json-lint
+  name: JSON lint
+  description: Check JSON files with 'jsonlint'
+  entry: pre_commit_hooks/generic-hook.sh jsonlint --compact
+  language: script
+  types: [file, json]
+
+- id: markdown-lint
+  name: Markdown lint
+  description: Check Markdown files with 'mdl' linter
+  entry: pre_commit_hooks/generic-hook.sh mdl
+  language: script
+  types: [file, markdown]
+
+- id: xml-lint
+  name: XML lint
+  description: Check XML files with 'xmllint'
+  entry: pre_commit_hooks/generic-hook.sh xmllint
+  language: script
+  types: [file, xml]
+
+- id: yamllint
+  name: yamllint
+  description: This hook runs yamllint.
+  entry: yamllint
+  language: python
+  types: [file, yaml]
+
+- id: ansible-lint
+  name: Ansible-lint
+  description: This hook runs ansible-lint.
+  entry: ansible-lint
+  language: python
+  files: \.(yaml|yml)$
+
+- id: docker-lint
+  name: Dockerfile lint
+  description: Check Dockerfiles with 'hadolint'
+  entry: pre_commit_hooks/generic-hook.sh hadolint
+  language: script
+  types: [file, dockerfile]
+
+- id: rubocop
+  name: Rubocop
+  description: Lint Ruby files with 'rubocop'
+  entry: pre_commit_hooks/generic-hook.sh rubocop
+  language: script
+  types: [file, ruby]
+
+- id: android-lint
+  name: Android lint
+  description: Check Android files with Android Studio 'lint'
+  entry: pre_commit_hooks/android-lint.sh
+  language: script
+  types: [file, java]
+
+# - id: oclint
+#   name: OCLint
+#   description: Check Objective-C files with 'oclint'
+#   entry: pre_commit_hooks/generic-hook.sh oclint
+#   language: script
+#   types: [file, objective-c]
+
+- id: swiftlint
+  name: Swiftlint
+  description: Check Swift files with 'swiftlint'
+  entry: pre_commit_hooks/swiftlint-hook.sh
+  language: script
+  types: [file, swift]
+
+# - id: ktlint
+#   name: Kotlin lint
+#   description: Lint Kotlin files with 'ktlint'
+#   entry: pre_commit_hooks/generic-hook.sh ktlint --format
+#   language: script
+#   types: [file, kotlin]
+
+- id: cppcheck
+  name: Cppcheck
+  description: Check C/C++ files with 'cppcheck'
+  entry: pre_commit_hooks/generic-hook.sh cppcheck
+  language: script
+  types: [file, c, c++]
+
+- id: clang-format
+  name: clang-format
+  description: Format files with ClangFormat
+  entry: clang-format
+  language: system
+  files: \.(c|cc|cxx|cpp|h|hpp|hxx|java|m|proto)$
+  args: ['-fallback-style=Google', '-i']
+
+- id: isort
+  name: isort
+  description: Sorts Python import statements
+  entry: isort
+  language: python
+  types: [file, python]
+
+- id: flake8
+  name: Flake8
+  description: This hook runs flake8.
+  entry: flake8
+  language: python
+  types: [python]
+
+- id: go-fmt
+  name: 'go fmt'
+  entry: pre_commit_hooks/run-go-fmt.sh
+  files: '\.go$'
+  language: script
+  description: "Runs `gofmt`, requires golang"
+
+- id: go-vet
+  name: 'go vet'
+  entry: pre_commit_hooks/run-go-vet.sh
+  files: '\.go$'
+  language: script
+  description: "Runs `go vet`, requires golang"
+
+- id: go-lint
+  name: 'go lint'
+  entry: pre_commit_hooks/run-go-lint.sh
+  files: '\.go$'
+  language: script
+  description: "Runs `golint`, requires https://github.com/golang/lint"
+
+- id: htmlhint
+  name: NodeJS HTML syntax linter (htmlhint)
+  entry: htmlhint
+  language: node
+  files: .*\.(html|hbs)$
+
+- id: htmllint
+  name: NodeJS HTML syntax linter (htmllint)
+  entry: htmllint
+  language: node
+  files: .*\.(html|hbs)$
+
+- id: csslint
+  name: csslint
+  entry: csslint
+  language: node
+  files: \.css$
+  args: []
+
+- id: stylelint
+  name: stylelint
+  entry: stylelint
+  language: node
+  files: \.(css|scss|sass)$
+  args: []
+
+- id: prettier
+  name: prettier
+  entry: prettier
+  language: node
+  files: \.(js|jsx|ts|css|less|json)&
+  args: ['--write']
+
+- id: tslint
+  name: tslint
+  entry: tslint
+  language: node
+  files: \.(ts)$
+  args: []
+
+- id: eslint
+  name: eslint
+  entry: eslint
+  language: node
+  types: [javascript]
+  args: []
