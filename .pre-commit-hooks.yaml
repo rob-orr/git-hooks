@@ -1,0 +1,101 @@
+---
+- id: fetch-notes
+  name: Fetch Git notes
+  description: Fetch the Git notes from the repo
+  entry: pre_commit_hooks/fetch-notes.sh
+  language: script
+
+- id: commit-message-line-length
+  name: Commit message line length
+  description: Check that message lines do not exceed max allowed line length
+  entry: pre_commit_hooks/commit-message-line-length.sh
+  language: script
+
+- id: commit-message-ticket-id
+  name: Commit message ticket ID
+  description: Check commit message to ensure that it contains a ticket ID
+  entry: pre_commit_hooks/commit-message-ticket-id.sh
+  language: script
+
+- id: num-files-in-commit
+  name: Number of files in commit
+  description: Check that number of files in commit is less than limit
+  entry: pre_commit_hooks/num-files-in-commit.sh
+  language: script
+
+- id: checkstyle
+  name: Checkstyle
+  description: Lint Java files with Checkstyle
+  entry: pre_commit_hooks/generic-hook.sh checkstyle
+  language: script
+  types: [file, java]
+
+- id: json-lint
+  name: JSON lint
+  description: Check JSON files with 'jsonlint'
+  entry: pre_commit_hooks/generic-hook.sh jsonlint --compact
+  language: script
+  types: [file, json]
+
+- id: markdown-lint
+  name: Markdown lint
+  description: Check Markdown files with 'mdl' linter
+  entry: pre_commit_hooks/generic-hook.sh mdl
+  language: script
+  types: [file, markdown]
+
+- id: xml-lint
+  name: XML lint
+  description: Check XML files with 'xmllint'
+  entry: pre_commit_hooks/generic-hook.sh xmllint
+  language: script
+  types: [file, xml]
+
+- id: docker-lint
+  name: Dockerfile lint
+  description: Check Dockerfiles with 'hadolint'
+  entry: pre_commit_hooks/generic-hook.sh hadolint
+  language: script
+  types: [file, dockerfile]
+
+- id: rubocop
+  name: Rubocop
+  description: Lint Ruby files with 'rubocop'
+  entry: pre_commit_hooks/generic-hook.sh rubocop
+  language: script
+  types: [file, ruby]
+
+- id: android-lint
+  name: Android lint
+  description: Check Android files with Android Studio 'lint'
+  entry: pre_commit_hooks/android-lint.sh
+  language: script
+  types: [file, java]
+
+# - id: oclint
+#   name: OCLint
+#   description: Check Objective-C files with 'oclint'
+#   entry: pre_commit_hooks/generic-hook.sh oclint
+#   language: script
+#   types: [file, objective-c]
+
+- id: swiftlint
+  name: Swiftlint
+  description: Check Swift files with 'swiftlint'
+  entry: pre_commit_hooks/swiftlint-hook.sh
+  language: script
+  types: [file, swift]
+
+# - id: ktlint
+#   name: Kotlin lint
+#   description: Lint Kotlin files with 'ktlint'
+#   entry: pre_commit_hooks/generic-hook.sh ktlint --format
+#   language: script
+#   types: [file, kotlin]
+
+- id: cppcheck
+  name: Cppcheck
+  description: Check C/C++ files with 'cppcheck'
+  entry: pre_commit_hooks/generic-hook.sh cppcheck
+  language: script
+  types: [file, c, c++]
