@@ -23,6 +23,11 @@
   entry: pre_commit_hooks/num-files-in-commit.sh
   language: script
 
+- id: send-telemetry
+  name: Send telemetry
+  description: Send usage telemetry to Google Analytics
+  language: script
+
 - id: checkstyle
   name: Checkstyle
   description: Lint Java files with Checkstyle
