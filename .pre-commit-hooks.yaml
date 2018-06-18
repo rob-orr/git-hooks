@@ -11,16 +11,16 @@
   entry: pre_commit_hooks/commit-message-line-length.sh
   language: script
 
-- id: commit-message-ticket-id
-  name: Commit message ticket ID
-  description: Check commit message to ensure that it contains a ticket ID
-  entry: pre_commit_hooks/commit-message-ticket-id.sh
-  language: script
-
 - id: num-files-in-commit
   name: Number of files in commit
   description: Check that number of files in commit is less than limit
   entry: pre_commit_hooks/num-files-in-commit.sh
+  language: script
+
+- id: send-telemetry
+  name: Send telemetry
+  description: Send usage telemetry to Google Analytics
+  entry: pre_commit_hooks/send-telemetry.sh
   language: script
 
 - id: checkstyle
