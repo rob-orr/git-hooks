@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+# TODO: add event execution time reporting
 GA_BASE='https://www.google-analytics.com/collect'
 PROTOCOL_VERSION=1
 TRACKING_ID='UA-118652049-1'
@@ -31,7 +32,7 @@ fi
 # redirect STDOUT to /dev/null
 exec 1>&/dev/null
 
-curl --get --silent --show-error \
+curl --get --silent --show-error --connect-timeout 1 \
     --data-urlencode "v=${PROTOCOL_VERSION}" \
     --data-urlencode "tid=${TRACKING_ID}" \
     --data-urlencode "cid=${user_hash}" \
@@ -45,4 +46,4 @@ curl --get --silent --show-error \
     --data-urlencode "z=${large_rand}" \
     "${GA_BASE}"
 
-exit $?
+exit 0
