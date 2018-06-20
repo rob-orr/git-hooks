@@ -23,6 +23,21 @@
   entry: pre_commit_hooks/send-telemetry.sh
   language: script
 
+- id: shellcheck
+  name: Test shell scripts with shellcheck
+  description: Shell scripts conform to shellcheck
+  entry: pre_commit_hooks/shellcheck.sh
+  language: script
+  types: [shell]
+  args: [-e, SC1091]
+
+- id: shfmt
+  name: Check shell style with shfmt
+  language: script
+  entry: pre_commit_hooks/shfmt.sh
+  types: [shell]
+  args: ['-l', '-w', '-i', '4', '-ci']
+
 - id: checkstyle
   name: Checkstyle
   description: Lint Java files with Checkstyle
@@ -99,3 +114,65 @@
   entry: pre_commit_hooks/generic-hook.sh cppcheck
   language: script
   types: [file, c, c++]
+
+- id: clang-format
+  name: clang-format
+  description: Format files with ClangFormat
+  entry: clang-format
+  language: system
+  files: \.(c|cc|cxx|cpp|h|hpp|hxx|java|m|proto)$
+  args: ['-fallback-style=Google', '-i']
+
+- id: isort
+  name: isort
+  description: Sorts Python import statements
+  entry: isort
+  language: python
+  types: [file, python]
+
+- id: go-fmt
+  name: 'go fmt'
+  entry: pre_commit_hooks/run-go-fmt.sh
+  files: '\.go$'
+  language: 'script'
+  description: "Runs `gofmt`, requires golang"
+
+- id: go-vet
+  name: 'go vet'
+  entry: pre_commit_hooks/run-go-vet.sh
+  files: '\.go$'
+  language: 'script'
+  description: "Runs `go vet`, requires golang"
+
+- id: go-lint
+  name: 'go lint'
+  entry: pre_commit_hooks/run-go-lint.sh
+  files: '\.go$'
+  language: 'script'
+  description: "Runs `golint`, requires https://github.com/golang/lint"
+
+- id: htmlhint
+  name: NodeJS HTML syntax linter (htmlhint)
+  entry: htmlhint
+  language: node
+  files: .*\.(html|hbs)$
+
+- id: htmllint
+  name: NodeJS HTML syntax linter (htmllint)
+  entry: htmllint
+  language: node
+  files: .*\.(html|hbs)$
+
+- id: csslint
+  name: csslint
+  entry: csslint
+  language: node
+  files: \.css$
+  args: []
+
+- id: stylelint
+  name: stylelint
+  entry: stylelint
+  language: node
+  files: \.(css|scss|sass)$
+  args: []
