@@ -134,21 +134,21 @@
   name: 'go fmt'
   entry: pre_commit_hooks/run-go-fmt.sh
   files: '\.go$'
-  language: 'script'
+  language: script
   description: "Runs `gofmt`, requires golang"
 
 - id: go-vet
   name: 'go vet'
   entry: pre_commit_hooks/run-go-vet.sh
   files: '\.go$'
-  language: 'script'
+  language: script
   description: "Runs `go vet`, requires golang"
 
 - id: go-lint
   name: 'go lint'
   entry: pre_commit_hooks/run-go-lint.sh
   files: '\.go$'
-  language: 'script'
+  language: script
   description: "Runs `golint`, requires https://github.com/golang/lint"
 
 - id: htmlhint
