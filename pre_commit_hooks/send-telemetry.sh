@@ -1,22 +1,22 @@
 #!/usr/bin/env bash
 
-# TODO: add event execution time reporting
 GA_BASE='https://www.google-analytics.com/collect'
 PROTOCOL_VERSION=1
 TRACKING_ID='UA-118652049-1'
 APP_NAME='git-hooks'
 APP_VERSION='1.0'
 HIT_TYPE='event'
-EVENT_CATEGORY='git-hooks-use'
+EVENT_CATEGORY_PREFIX='git-hooks-'
 
 SALT='8w4ebZhFxw1ZTQAJ3XwouepQshYqgR1W'
 user_hash=$(echo -n "${USER}" | openssl dgst -sha256 -hmac "${SALT}" -hex)
 large_rand=$((RANDOM * RANDOM * RANDOM))
 
-event_action=''
+category=''
 if [[ ! -z "$1" ]]; then
-    event_action="$1"
+    category="$1"
 fi
+event_category=${EVENT_CATEGORY_PREFIX}${category}
 
 repo_base_dir=$(git rev-parse --show-toplevel)
 if [[ -d "${repo_base_dir}"/.git ]]; then
@@ -28,11 +28,27 @@ else
     main_repo=$(dirname "${git_dir}")
     repo_name=$(basename "${main_repo}")
 fi
+event_action=${repo_name}
+
+event_label=''
+# TODO: add hooks used as event label
+# if [[ ! -z "$2" ]]; then
+#     event_label="$2"
+# fi
+
+event_value=0
+if [[ ! -z "$2" ]]; then
+    event_value="$2"
+else
+    start_time=$(ps -p $PPID -o lstart= | xargs -0 date +%s -d)
+    end_time=$(date +%s)
+    event_value=$(("${end_time}" - "${start_time}"))
+fi
 
 # redirect STDOUT to /dev/null
 exec 1>&/dev/null
 
-curl --get --silent --show-error --connect-timeout 1 \
+curl --get --silent --show-error --connect-timeout 2 \
     --data-urlencode "v=${PROTOCOL_VERSION}" \
     --data-urlencode "tid=${TRACKING_ID}" \
     --data-urlencode "cid=${user_hash}" \
@@ -40,10 +56,12 @@ curl --get --silent --show-error --connect-timeout 1 \
     --data-urlencode "an=${APP_NAME}" \
     --data-urlencode "av=${APP_VERSION}" \
     --data-urlencode "t=${HIT_TYPE}" \
-    --data-urlencode "ec=${EVENT_CATEGORY}" \
+    --data-urlencode "ec=${event_category}" \
     --data-urlencode "ea=${event_action}" \
-    --data-urlencode "el=${repo_name}" \
+    --data-urlencode "el=${event_label}" \
+    --data-urlencode "ev=${event_value}" \
     --data-urlencode "z=${large_rand}" \
     "${GA_BASE}"
 
+# Always return zero so that Git hooks action NEVER fails due to telemetry failing
 exit 0
