@@ -18,6 +18,11 @@
   entry: pre_commit_hooks/num-files-in-commit.sh
   language: script
 
+- id: gitlint
+  name: gitlint
+  entry: gitlint --msg-filename
+  language: python
+
 - id: send-telemetry
   name: Send telemetry
   description: Send usage telemetry to Google Analytics
@@ -67,6 +72,20 @@
   entry: pre_commit_hooks/generic-hook.sh xmllint
   language: script
   types: [file, xml]
+
+- id: yamllint
+  name: yamllint
+  description: This hook runs yamllint.
+  entry: yamllint
+  language: python
+  types: [file, yaml]
+
+- id: ansible-lint
+  name: Ansible-lint
+  description: This hook runs ansible-lint.
+  entry: ansible-lint
+  language: python
+  files: \.(yaml|yml)$
 
 - id: docker-lint
   name: Dockerfile lint
@@ -132,6 +151,13 @@
   language: python
   types: [file, python]
 
+- id: flake8
+  name: Flake8
+  description: This hook runs flake8.
+  entry: flake8
+  language: python
+  types: [python]
+
 - id: go-fmt
   name: 'go fmt'
   entry: pre_commit_hooks/run-go-fmt.sh
@@ -177,4 +203,25 @@
   entry: stylelint
   language: node
   files: \.(css|scss|sass)$
+  args: []
+
+- id: prettier
+  name: prettier
+  entry: prettier
+  language: node
+  files: \.(js|jsx|ts|css|less|json)&
+  args: ['--write']
+
+- id: tslint
+  name: tslint
+  entry: tslint
+  language: node
+  files: \.(ts)$
+  args: []
+
+- id: eslint
+  name: eslint
+  entry: eslint
+  language: node
+  types: [javascript]
   args: []
