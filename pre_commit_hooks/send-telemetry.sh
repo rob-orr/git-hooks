@@ -8,6 +8,7 @@ APP_VERSION='1.0'
 HIT_TYPE='event'
 EVENT_CATEGORY_PREFIX='git-hooks-'
 CONNECT_TIMEOUT=2
+MAX_PPID_DEPTH=16
 
 SALT='8w4ebZhFxw1ZTQAJ3XwouepQshYqgR1W'
 user_hash=$(echo -n "${USER}" | openssl dgst -sha256 -hmac "${SALT}" -hex)
@@ -44,14 +45,16 @@ else
     ppid_count=1
     parentPID=${PPID}
     parentCmd=$(ps -p "${parentPID}" -o comm=)
-    until [[ "${parentCmd}" == 'git' || "${parentPID}" == 1 || ppid_count -eq 20 ]]; do
+    until [[ "${parentCmd}" == 'git' || "${parentPID}" == 1 || ppid_count -eq ${MAX_PPID_DEPTH} ]]; do
         parentPID=$(ps -p "${parentPID}" -o ppid=)
         parentCmd=$(ps -p "${parentPID}" -o comm=)
         ((ppid_count += 1))
     done
-    if [[ "${parentPID}" == 1 || ppid_count -eq 20 ]]; then
+    if [[ "${parentPID}" == 1 || ppid_count -eq ${MAX_PPID_DEPTH} ]]; then
         # 'git' wasn't found...reset to $PPID
         parentPID=${PPID}
+        parentCmd=$(ps -p "${parentPID}" -o comm=)
+        echo "telemetry: parent 'git' not found, using ${parentCmd}"
     fi
     start_time=$(ps -p "${parentPID}" -o lstart= | xargs -0 date +%s -d)
     end_time=$(date +%s)
